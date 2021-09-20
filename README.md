@@ -32,6 +32,8 @@ An app streaming tweets from twitter using kafka based on some hashtag and then 
 ~ hive> drop table TwitterData;
 
 ~ hive> CREATE EXTERNAL TABLE IF NOT EXISTS TwitterData(createdAt STRING,Id STRING,userId STRING,location STRING,followersCount STRING,isVerified STRING,UserCreatedAt STRING,timezone STRING,sentiment STRING,tweetHours STRING,tweetMinutes STRING,tweetSeconds STRING,userCreatedMonth STRING,userCreatedYear STRING,hashtags STRING,userName STRING,Text STRING)COMMENT 'Twitter Live Data'ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' WITH SERDEPROPERTIES ("separatorChar" = ",","quoteChar" = "\"" )LOCATION '/user/cloudera/twitterTweets';
+
+~ hive> CREATE EXTERNAL TABLE IF NOT EXISTS TwitterData(tweetHours STRING,hashtag STRING)COMMENT 'Twitter Live hashtags'ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde' WITH SERDEPROPERTIES ("separatorChar" = ",","quoteChar" = "\"" )LOCATION '/user/cloudera/twitterHashtags';
 ```
 3. Download CS523-Twitter-Kafka-Streaming by cloning the [Git Repo](https://github.com/basmaashouur/CS523-Twitter-Kafka-Streaming)
 4. Import the project using eclipse 
