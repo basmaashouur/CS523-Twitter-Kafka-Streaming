@@ -17,12 +17,11 @@ public class KafkaStreamSQL {
                 .master("local[*]").getOrCreate();
         Dataset<Row> ds = spark.readStream().format("kafka")
                 .option("kafka.bootstrap.servers", "localhost:9092")
-                .option("subscribe", "TwitterDataAnalytics").load();
+                .option("subscribe", "TwitterDataAnalysisProject").load();
         Dataset<Row> lines = ds.selectExpr("CAST(value AS STRING)");
         Dataset<Row> dataAsSchema = lines.selectExpr("value",
                 "split(value,',')[0] as createdAt",
-                "split(value,',')[1] as Id", 
-                "split(value,',')[2] as UserId",
+                "split(value,',')[1] as Id", "split(value,',')[2] as UserId",
                 "split(value,',')[3] as Location",
                 "split(value,',')[4] as FollowersCount",
                 "split(value,',')[5] as isVerified",
@@ -35,8 +34,7 @@ public class KafkaStreamSQL {
                 "split(value,',')[12] as UserCreatedMonth",
                 "split(value,',')[13] as UserCreatedYear",
                 "split(value,',')[14] as hashtags",
-                "split(value,',')[15] as Name", 
-                "split(value,',')[16] as Text")
+                "split(value,',')[15] as Name", "split(value,',')[16] as Text")
                 .drop("value");
         dataAsSchema = dataAsSchema
                 .withColumn(
@@ -73,26 +71,26 @@ public class KafkaStreamSQL {
                         "sentiment",
                         functions.regexp_replace(functions.col("sentiment"),
                                 " ", ""))
-                 .withColumn(
+                .withColumn(
                         "TweetCreatedHour",
-                        functions.regexp_replace(functions.col("TweetCreatedHour"),
-                                " ", ""))
+                        functions.regexp_replace(
+                                functions.col("TweetCreatedHour"), " ", ""))
                 .withColumn(
                         "TweetCreatedMin",
                         functions.regexp_replace(
                                 functions.col("TweetCreatedMin"), " ", ""))
                 .withColumn(
                         "TweetCreatedSec",
-                        functions.regexp_replace(functions.col("TweetCreatedSec"),
-                                " ", ""))
+                        functions.regexp_replace(
+                                functions.col("TweetCreatedSec"), " ", ""))
                 .withColumn(
                         "UserCreatedMonth",
                         functions.regexp_replace(
                                 functions.col("UserCreatedMonth"), " ", ""))
                 .withColumn(
                         "UserCreatedYear",
-                        functions.regexp_replace(functions.col("UserCreatedYear"),
-                                " ", ""))
+                        functions.regexp_replace(
+                                functions.col("UserCreatedYear"), " ", ""))
                 .withColumn(
                         "hashtags",
                         functions.regexp_replace(functions.col("hashtags"),
@@ -126,20 +124,26 @@ public class KafkaStreamSQL {
                         functions.col("TimeZone").cast(DataTypes.StringType))
                 .withColumn("sentiment",
                         functions.col("sentiment").cast(DataTypes.StringType))
-                 .withColumn(
+                .withColumn(
                         "TweetCreatedHour",
                         functions.col("TweetCreatedHour").cast(
                                 DataTypes.StringType))
-                .withColumn("TweetCreatedMin",
-                        functions.col("TweetCreatedMin").cast(DataTypes.StringType))
+                .withColumn(
+                        "TweetCreatedMin",
+                        functions.col("TweetCreatedMin").cast(
+                                DataTypes.StringType))
                 .withColumn(
                         "TweetCreatedSec",
                         functions.col("TweetCreatedSec").cast(
                                 DataTypes.IntegerType))
-                .withColumn("UserCreatedMonth",
-                        functions.col("UserCreatedMonth").cast(DataTypes.StringType))
-                .withColumn("TweetCreatedSec",
-                        functions.col("TweetCreatedSec").cast(DataTypes.StringType))
+                .withColumn(
+                        "UserCreatedMonth",
+                        functions.col("UserCreatedMonth").cast(
+                                DataTypes.StringType))
+                .withColumn(
+                        "TweetCreatedSec",
+                        functions.col("TweetCreatedSec").cast(
+                                DataTypes.StringType))
                 .withColumn("hashtags",
                         functions.col("hashtags").cast(DataTypes.StringType))
                 .withColumn("Name",
